@@ -53,10 +53,18 @@ CREATE TABLE IF NOT EXISTS stripe_events (
   received_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_usage_events_tenant_created
-  ON usage_events (tenant_id, created_at);
-CREATE INDEX IF NOT EXISTS idx_subscriptions_tenant
-  ON subscriptions (tenant_id);
+CREATE TABLE IF NOT EXISTS monthly_usage_rollups (
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  month_start TIMESTAMPTZ NOT NULL,
+  api_calls BIGINT NOT NULL DEFAULT 0,
+  ai_tokens BIGINT NOT NULL DEFAULT 0,
+  cost_micro BIGINT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (tenant_id, month_start)
+);
+
+CREATE INDEX IF NOT EXISTS idx_usage_events_tenant_created ON usage_events (tenant_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_subscriptions_tenant ON subscriptions (tenant_id);
 
 INSERT INTO plans (name, api_call_limit, ai_token_limit, api_call_price_cents, input_token_price_micro, cached_input_token_price_micro, output_token_price_micro)
 VALUES
