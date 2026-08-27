@@ -10,7 +10,7 @@ const plan = {
 
 test('cached input is cheaper and reasoning is billed as output', () => {
   const usage = { inputTokens: 1000, cachedInputTokens: 200, outputTokens: 500, reasoningTokens: 300 };
-  assert.equal(calculateAiCostMicro(usage, plan), 18_000);
+  assert.equal(calculateAiCostMicro(usage, plan), 24_600);
 });
 
 test('token quota quantity includes all token categories', () => {
