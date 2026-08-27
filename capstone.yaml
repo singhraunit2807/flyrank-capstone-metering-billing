@@ -1,0 +1,10 @@
+run: npm start
+seed: node scripts/seed.js
+test: npm test
+base_url: http://localhost:3000
+endpoints:
+  - GET /health
+  - GET /usage
+  - POST /v1/generate
+  - POST /billing/checkout
+  - POST /webhooks/stripe
